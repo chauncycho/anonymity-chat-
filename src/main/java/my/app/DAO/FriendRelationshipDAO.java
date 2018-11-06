@@ -32,4 +32,12 @@ public class FriendRelationshipDAO {
         SqlSessionFactoryUtils.closeSession(sqlSession);
         return row;
     }
+
+    public static int updateRelationship(FriendRelationship fr){
+        SqlSession sqlSession = SqlSessionFactoryUtils.openSession();
+        int row = sqlSession.update("updateRelationship",fr);
+        sqlSession.commit();
+        SqlSessionFactoryUtils.closeSession(sqlSession);
+        return row;
+    }
 }

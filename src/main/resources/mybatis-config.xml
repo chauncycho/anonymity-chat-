@@ -18,5 +18,6 @@
     <mappers>
         <mapper resource="mapper/usersMapper.xml"/>
         <mapper resource="mapper/detailsMapper.xml"/>
+        <mapper resource="mapper/friendRelationshipMapper.xml"/>
     </mappers>
 </configuration>

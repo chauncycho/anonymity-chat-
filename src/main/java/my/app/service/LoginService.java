@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import my.app.DAO.DetailDAO;
 import my.app.DAO.UserDAO;
 import my.app.entities.Detail;
+import my.app.entities.FriendRelationship;
 import my.app.entities.User;
 import my.app.utils.UUIDmaker;
 import my.app.utils.UserUtil;
@@ -17,12 +18,14 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LoginService {
     private String res;//微信服务器返回的openID等
     private User user;//用户信息
     private Detail detail;//详细信息
+    private RelationshipService relationshipService;//用户好友关系
 
     public LoginService(){}
 
@@ -87,6 +90,12 @@ public class LoginService {
             this.user = check(res);
             initDetail(this.user.getId());
         }
+    }
+
+    public List<FriendRelationship> getRelationships(){
+        int id = user.getId();
+        RelationshipService rs = new RelationshipService(id);
+        return rs.getRelationships();
     }
 
     /**
@@ -181,9 +190,11 @@ public class LoginService {
         user.put("fackName", this.user.getFackName());
 
         //详细信息
-        user.put("detail",new Gson().toJson(this.detail,Detail.class));
-
-        return new Gson().toJson(user,Map.class);
+        user.put("detail",this.detail);
+        user.put("relationship",getRelationships());
+        String res = new Gson().toJson(user,Map.class);
+        System.out.println(res);
+        return res;
     }
 
     /**

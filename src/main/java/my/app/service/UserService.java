@@ -16,7 +16,6 @@ public class UserService {
     }
 
     /**
-     * @param detail
      * @param flag 判断是否关联user表
      */
     private void update(User user, boolean flag){
@@ -60,10 +59,12 @@ public class UserService {
     }
 
     public static void main(String[] args) {
-        UserService userService = new UserService(13);
-        User user = new User();
-        user.setId(userService.user.getId());
-        user.setName("hacker");
-        userService.update(user);
+//        UserService userService = new UserService(13);
+//        User user = new User();
+//        user.setId(userService.user.getId());
+//        user.setName("hacker");
+//        userService.update(user);
+        UserService userService = new UserService(5);
+        System.out.println(userService.user);
     }
 }

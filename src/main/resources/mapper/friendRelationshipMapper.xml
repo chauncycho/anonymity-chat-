@@ -16,5 +16,14 @@
         VALUES (#{user_id},#{friend_id},#{intimacy},#{type},#{remark})
     </insert>
 
-
+    <update id="updateRelationship">
+        UPDATE friend_relationship
+        <set>
+            <if test="friend_id != null">friend_id = #{friend_id},</if>
+            <if test="intimacy != null">intimacy = #{intimacy},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        WHERE user_id = #{user_id}
+    </update>
 </mapper>
