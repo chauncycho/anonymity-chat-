@@ -3,7 +3,13 @@ package my.app.service;
 import my.app.DAO.DetailDAO;
 import my.app.DAO.UserDAO;
 import my.app.entities.Detail;
+import my.app.entities.FriendRelationship;
 import my.app.entities.User;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 public class UserService {
     User user;
@@ -58,13 +64,49 @@ public class UserService {
         updateDetail(detail,true);
     }
 
+    public List<FriendRelationship> getRelationships(){
+        int id = user.getId();
+        RelationshipService rs = new RelationshipService(id);
+        return rs.getRelationships();
+    }
+
+    public List getUsersInfoByRelationships(List<FriendRelationship> relationships){
+        List<Map> res = new Vector<Map>();
+        for (FriendRelationship fr : relationships){
+            int id = fr.getFriend_id();//好友id
+
+            User friend = UserDAO.findUserById(id);//好友
+
+            Map map = new HashMap();//好友信息
+            if ("friend".equals(fr.getType())) {//是否匿名
+                map.put("name",friend.getName());
+                map.put("profile",friend.getProfilePath());
+                map.put("type","friend");
+            }else if("anonymity".equals(fr.getType())){
+                map.put("name",friend.getFackName());
+                map.put("profile",friend.getMaskPath());
+                map.put("type","anonymity");
+            }
+            map.put("id",fr.getFriend_id());
+            map.put("motto",friend.getMotto());
+
+            res.add(map);
+        }
+
+        return res;
+    }
+
+    public List getFriends(){
+        return getUsersInfoByRelationships(getRelationships());
+    }
+
     public static void main(String[] args) {
 //        UserService userService = new UserService(13);
 //        User user = new User();
 //        user.setId(userService.user.getId());
 //        user.setName("hacker");
 //        userService.update(user);
-        UserService userService = new UserService(5);
+        UserService userService = new UserService(13);
         System.out.println(userService.user);
     }
 }

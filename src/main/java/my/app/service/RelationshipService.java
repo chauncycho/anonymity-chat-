@@ -44,13 +44,13 @@ public class RelationshipService {
     //test
     public static void main(String[] args) {
         int id1 = 5;//我
-        int id2 = 13;//对方
+        int id2 = 6;//对方
 
         RelationshipService rs1 = new RelationshipService(id1);
-        rs1.insertRelationship(id2,233,"anonymity",null);
+        rs1.setRelationship(id2,666,null,null);
 
         RelationshipService rs2 = new RelationshipService(id2);
-        rs2.insertRelationship(id1,233,"anonymity",null);
+        rs2.setRelationship(id1,666,null,null);
 
 
         System.out.println(rs1.getRelationships());

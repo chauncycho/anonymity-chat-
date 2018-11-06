@@ -20,12 +20,13 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 public class LoginService {
     private String res;//微信服务器返回的openID等
     private User user;//用户信息
     private Detail detail;//详细信息
-    private RelationshipService relationshipService;//用户好友关系
+    private UserService userService;//用户服务
 
     public LoginService(){}
 
@@ -92,11 +93,6 @@ public class LoginService {
         }
     }
 
-    public List<FriendRelationship> getRelationships(){
-        int id = user.getId();
-        RelationshipService rs = new RelationshipService(id);
-        return rs.getRelationships();
-    }
 
     /**
      * 判断openID对应的用户是否存在
@@ -141,6 +137,8 @@ public class LoginService {
             initUser(openid);
             this.user = getUserByOpenId(openid);
         }
+
+        this.userService = new UserService(this.user.getId());
         return this.user;
     }
 
@@ -191,7 +189,7 @@ public class LoginService {
 
         //详细信息
         user.put("detail",this.detail);
-        user.put("relationship",getRelationships());
+        user.put("friends",userService.getFriends());
         String res = new Gson().toJson(user,Map.class);
         System.out.println(res);
         return res;

@@ -19,11 +19,10 @@
     <update id="updateRelationship">
         UPDATE friend_relationship
         <set>
-            <if test="friend_id != null">friend_id = #{friend_id},</if>
             <if test="intimacy != null">intimacy = #{intimacy},</if>
             <if test="type != null">type = #{type},</if>
             <if test="remark != null">remark = #{remark},</if>
         </set>
-        WHERE user_id = #{user_id}
+        WHERE user_id = #{user_id} AND friend_id = #{friend_id}
     </update>
 </mapper>
