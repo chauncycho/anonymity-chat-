@@ -40,6 +40,7 @@ public class WebSocketService {
     public void onMessage(String message ,Session session) throws IOException {
         System.out.println(getUseridBySession(session)+"说了:"+message);
         session.getBasicRemote().sendText("你刚刚说了："+message);
+
     }
 
     @OnError
