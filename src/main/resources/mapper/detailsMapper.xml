@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="my.app.entities.User">
+    <select id="findDetailById" resultType="my.app.entities.Detail">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+    <insert id="insertDetail">
+        INSERT detail(id,motto,birthday,age,star,email,name,gender,conpany,school,position,profession)
+        VALUES (#{id},#{motto},#{birthday},#{age},#{star},#{email},#{name},#{gender},#{conpany},#{school},#{position},#{profession})
+    </insert>
+
+    <update id="updateDetail">
+        UPDATE detail
+        <set>
+            <if test="motto != null">motto = #{motto},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="star != null">star = #{star},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="conpany != null">conpany = #{conpany},</if>
+            <if test="school != null">school = #{school},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="profession != null">profession = #{profession},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="my.app.entities.User">
+    <select id="findUserByOpenid" resultType="my.app.entities.User">
+        SELECT * FROM user WHERE openid = #{openid}
+    </select>
+
+    <select id="findUserById" resultType="my.app.entities.User">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+    <insert id="insertUser">
+        INSERT user(name,openid,codePath,motto,maskPath,profilePath,fackName)
+        VALUES (#{name},#{openid},#{codePath},#{motto},#{maskPath},#{profilePath},#{fackName})
+    </insert>
+
+    <update id="updateUser">
+        UPDATE user
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="codePath != null">codePath = #{codePath},</if>
+            <if test="motto != null">motto = #{motto},</if>
+            <if test="maskPath != null">maskPath = #{maskPath},</if>
+            <if test="profilePath != null">profilePath = #{profilePath},</if>
+            <if test="fackName != null">fackName = #{fackName},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>

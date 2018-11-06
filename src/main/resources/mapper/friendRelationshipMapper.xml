@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="my.app.entities.User">
+    <select id="findFriendRelationshipByUserid" resultType="my.app.entities.FriendRelationship">
+        SELECT * FROM friend_relationship WHERE user_id = #{user_id}
+    </select>
+
+    <select id="findFriendRelationshipByFriendid" resultType="my.app.entities.FriendRelationship">
+        SELECT * FROM friend_relationship WHERE friend_id = #{friend_id}
+    </select>
+
+    <insert id="insertRelationship">
+        INSERT friend_relationship(user_id,friend_id,intimacy,type,remark)
+        VALUES (#{user_id},#{friend_id},#{intimacy},#{type},#{remark})
+    </insert>
+
+
+</mapper>
