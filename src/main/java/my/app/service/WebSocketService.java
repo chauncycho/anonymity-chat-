@@ -1,5 +1,6 @@
 package my.app.service;
 
+import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpsConfigurator;
 
 import javax.servlet.http.HttpSession;
@@ -7,6 +8,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -74,6 +77,29 @@ public class WebSocketService {
             }
         }
         return userid;
+    }
+
+    public void sendTextMessage(Session session, String str_target_id, String value){
+        String strUserid = getUseridBySession(session);
+        int userid = Integer.parseInt(strUserid);
+        int target_id = Integer.parseInt(str_target_id);
+        MessageService.addTextMessage(userid,target_id,value);//入数据库
+
+        //消息处理
+        Session targetSession = getSessionByUserid(str_target_id);
+        Map mapMessage = new HashMap();
+        mapMessage.put("userId",strUserid);
+        mapMessage.put("targetId",str_target_id);
+        mapMessage.put("type","text");
+        mapMessage.put("value",value);
+        mapMessage.put("time",new Date());
+        String jsonMessage = new Gson().toJson(mapMessage);
+
+        try {
+            targetSession.getBasicRemote().sendText(jsonMessage);//发送
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
