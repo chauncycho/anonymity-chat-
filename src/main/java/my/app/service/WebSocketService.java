@@ -102,7 +102,7 @@ public class WebSocketService {
         mapMessage.put("type","text");
         mapMessage.put("value",value);
         mapMessage.put("time",new Date());
-        String jsonMessage = new Gson().toJson(mapMessage);
+        String jsonMessage = new Gson().toJson(mapMessage,Map.class);
 
         try {
             targetSession.getBasicRemote().sendText(jsonMessage);//发送
