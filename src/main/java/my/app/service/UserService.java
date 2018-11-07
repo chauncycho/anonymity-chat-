@@ -5,6 +5,7 @@ import my.app.DAO.UserDAO;
 import my.app.entities.Detail;
 import my.app.entities.FriendRelationship;
 import my.app.entities.User;
+import my.app.utils.UserUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -79,16 +80,21 @@ public class UserService {
 
             Map map = new HashMap();//好友信息
             if ("friend".equals(fr.getType())) {//是否匿名
+                Detail detail = DetailDAO.findDetailById(id);
                 map.put("name",friend.getName());
                 map.put("profile",friend.getProfilePath());
                 map.put("type","friend");
+                map.put("age",detail.getAge());
+                map.put("star",detail.getStar());
             }else if("anonymity".equals(fr.getType())){
                 map.put("name",friend.getFackName());
                 map.put("profile",friend.getMaskPath());
                 map.put("type","anonymity");
             }
-            map.put("id",fr.getFriend_id());
+            map.put("id", UserUtil.formatId(fr.getFriend_id()));
             map.put("motto",friend.getMotto());
+            map.put("remark",fr.getRemark());
+            map.put("intimacy",fr.getIntimacy());
 
             res.add(map);
         }
@@ -98,6 +104,15 @@ public class UserService {
 
     public List getFriends(){
         return getUsersInfoByRelationships(getRelationships());
+    }
+
+    //处理返回消息
+    public List getMessages(){
+        List res = new Vector();
+
+
+
+        return res;
     }
 
     public static void main(String[] args) {

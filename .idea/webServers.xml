@@ -2,8 +2,16 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="61c64ef5-2d37-4990-8dc0-5b7d0bc12bc2" name="remote server" url="http://139.199.126.47/chat">
+      <webServer id="61c64ef5-2d37-4990-8dc0-5b7d0bc12bc2" name="tencent remote server" url="http://139.199.126.47/chat">
         <fileTransfer host="139.199.126.47" port="22" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="ff34767a-f5e7-4dd0-bd86-678438dc910b" name="aliyun remote server" url="http://47.94.1.103">
+        <fileTransfer host="47.94.1.103" port="22" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>

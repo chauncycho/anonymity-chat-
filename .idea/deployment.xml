@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="remote server">
+  <component name="PublishConfigData" serverName="tencent remote server">
     <serverData>
-      <paths name="remote server">
+      <paths name="tencent remote server">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$/out/artifacts/chat_war_exploded" web="/" />

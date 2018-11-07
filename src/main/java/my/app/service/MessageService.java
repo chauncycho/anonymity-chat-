@@ -35,7 +35,11 @@ public class MessageService {
 
 //    测试
     public static void main(String[] args) {
-        MessageService.addTextMessage(5,6,"I love you");
-        System.out.println(MessageService.getMessagesById(5));
+//        MessageService.addTextMessage(5,8,"去不去吃饭");
+//        MessageService.addTextMessage(8,5,"不去");
+//        MessageService.addTextMessage(5,8,"为什么");
+//        MessageService.addTextMessage(8,5,"冷");
+        System.out.println(MessageService.getMessagesByIdAndTargetId(5,8));
+//        System.out.println(MessageService.getMessagesById(8));
     }
 }
