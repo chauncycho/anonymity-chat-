@@ -190,6 +190,7 @@ public class LoginService {
         //详细信息
         user.put("detail",this.detail);
         user.put("friends",userService.getFriends());
+        user.put("messages",userService.getMessages());
         String res = new Gson().toJson(user,Map.class);
         System.out.println(res);
         return res;

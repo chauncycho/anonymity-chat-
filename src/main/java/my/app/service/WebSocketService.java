@@ -42,8 +42,13 @@ public class WebSocketService {
     @OnMessage
     public void onMessage(String message ,Session session) throws IOException {
         System.out.println(getUseridBySession(session)+"说了:"+message);
-        session.getBasicRemote().sendText("你刚刚说了："+message);
-
+        Map map = new Gson().fromJson(message, Map.class);
+        System.out.println(map);
+        String target_id = (String) map.get("target_id");
+        String value = (String)map.get("value");
+//        System.out.println(user_id+" "+target_id+" "+value);
+        //发送
+        sendTextMessage(session,target_id,value);
     }
 
     @OnError
@@ -73,20 +78,25 @@ public class WebSocketService {
         for (String key : users.keySet()){
             if (users.get(key).equals(session)){
                 userid = key;
-                users.remove(key);
             }
         }
         return userid;
     }
 
     public void sendTextMessage(Session session, String str_target_id, String value){
-        String strUserid = getUseridBySession(session);
-        int userid = Integer.parseInt(strUserid);
-        int target_id = Integer.parseInt(str_target_id);
+        String strUserid = getUseridBySession(session);//自己id
+        int userid = Integer.parseInt(strUserid);//自己id
+        int target_id = Integer.parseInt(str_target_id);//对方id
         MessageService.addTextMessage(userid,target_id,value);//入数据库
 
         //消息处理
-        Session targetSession = getSessionByUserid(str_target_id);
+        Session targetSession = getSessionByUserid(str_target_id);//对方session
+
+        if (targetSession == null){
+            System.out.println("对方不在线，发送失败");
+            return;
+        }
+
         Map mapMessage = new HashMap();
         mapMessage.put("userId",strUserid);
         mapMessage.put("targetId",str_target_id);

@@ -1,23 +1,23 @@
 package my.app.service;
 
 import my.app.DAO.DetailDAO;
+import my.app.DAO.MessageDAO;
 import my.app.DAO.UserDAO;
 import my.app.entities.Detail;
 import my.app.entities.FriendRelationship;
+import my.app.entities.Message;
 import my.app.entities.User;
 import my.app.utils.UserUtil;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UserService {
     User user;
     Detail detail;
-    String[] con = new String[]{"motto","name"};
+    String[] con = new String[]{"motto", "name"};
 
-    public UserService(int id){
+    public UserService(int id) {
         user = UserDAO.findUserById(id);
         detail = DetailDAO.findDetailById(id);
     }
@@ -25,55 +25,55 @@ public class UserService {
     /**
      * @param flag 判断是否关联user表
      */
-    private void update(User user, boolean flag){
-        if (flag && (user.getMotto() != null || user.getName() != null)){
+    private void update(User user, boolean flag) {
+        if (flag && (user.getMotto() != null || user.getName() != null)) {
             Detail detail = new Detail();
             detail.setId(user.getId());
             detail.setMotto(user.getMotto());
             detail.setName(user.getName());
-            updateDetail(detail,false);
+            updateDetail(detail, false);
         }
 
-        if(UserDAO.updateUser(user) != 0){
+        if (UserDAO.updateUser(user) != 0) {
             this.user = user;
         }
     }
 
-    public void update(User user){
-        update(user,true);
+    public void update(User user) {
+        update(user, true);
     }
 
     /**
      * @param detail
-     * @param flag 判断是否关联user表
+     * @param flag   判断是否关联user表
      */
-    private void updateDetail(Detail detail, boolean flag){
-        if(flag && (detail.getMotto() != null || detail.getName() != null)){
+    private void updateDetail(Detail detail, boolean flag) {
+        if (flag && (detail.getMotto() != null || detail.getName() != null)) {
             User user = new User();
             user.setId(detail.getId());
             user.setMotto(detail.getMotto());
             user.setName(detail.getName());
-            update(user,false);
+            update(user, false);
         }
 
-        if (DetailDAO.updateDetail(detail) != 0){
+        if (DetailDAO.updateDetail(detail) != 0) {
             this.detail = detail;
         }
     }
 
-    public void updateDetail(Detail detail){
-        updateDetail(detail,true);
+    public void updateDetail(Detail detail) {
+        updateDetail(detail, true);
     }
 
-    public List<FriendRelationship> getRelationships(){
+    public List<FriendRelationship> getRelationships() {
         int id = user.getId();
         RelationshipService rs = new RelationshipService(id);
         return rs.getRelationships();
     }
 
-    public List getUsersInfoByRelationships(List<FriendRelationship> relationships){
+    public List getUsersInfoByRelationships(List<FriendRelationship> relationships) {
         List<Map> res = new Vector<Map>();
-        for (FriendRelationship fr : relationships){
+        for (FriendRelationship fr : relationships) {
             int id = fr.getFriend_id();//好友id
 
             User friend = UserDAO.findUserById(id);//好友
@@ -81,20 +81,20 @@ public class UserService {
             Map map = new HashMap();//好友信息
             if ("friend".equals(fr.getType())) {//是否匿名
                 Detail detail = DetailDAO.findDetailById(id);
-                map.put("name",friend.getName());
-                map.put("profile",friend.getProfilePath());
-                map.put("type","friend");
-                map.put("age",detail.getAge());
-                map.put("star",detail.getStar());
-            }else if("anonymity".equals(fr.getType())){
-                map.put("name",friend.getFackName());
-                map.put("profile",friend.getMaskPath());
-                map.put("type","anonymity");
+                map.put("name", friend.getName());
+                map.put("profile", friend.getProfilePath());
+                map.put("type", "friend");
+                map.put("age", detail.getAge());
+                map.put("star", detail.getStar());
+            } else if ("anonymity".equals(fr.getType())) {
+                map.put("name", friend.getFackName());
+                map.put("profile", friend.getMaskPath());
+                map.put("type", "anonymity");
             }
             map.put("id", UserUtil.formatId(fr.getFriend_id()));
-            map.put("motto",friend.getMotto());
-            map.put("remark",fr.getRemark());
-            map.put("intimacy",fr.getIntimacy());
+            map.put("motto", friend.getMotto());
+            map.put("remark", fr.getRemark());
+            map.put("intimacy", fr.getIntimacy());
 
             res.add(map);
         }
@@ -102,18 +102,29 @@ public class UserService {
         return res;
     }
 
-    public List getFriends(){
+    public List getFriends() {
         return getUsersInfoByRelationships(getRelationships());
     }
 
     //处理返回消息
-    public List getMessages(){
+    public List getMessages() {
         List res = new Vector();
-
-
-
+        List rl = getRelationships();
+        for (Object o : rl) {
+            FriendRelationship fr = (FriendRelationship) o;
+            Map map = new ConcurrentHashMap();
+            map.put("targetId", fr.getFriend_id());
+            List messages = MessageService.getMessagesByIdAndTargetId(user.getId(), fr.getFriend_id());
+            map.put("messages", messages);
+            if (!messages.isEmpty()) {
+                Date date = ((Message) messages.get(messages.size()-1)).getTime();
+                map.put("lastTime", date);
+            }
+            res.add(map);
+        }
         return res;
     }
+
 
     public static void main(String[] args) {
 //        UserService userService = new UserService(13);
@@ -121,7 +132,7 @@ public class UserService {
 //        user.setId(userService.user.getId());
 //        user.setName("hacker");
 //        userService.update(user);
-        UserService userService = new UserService(13);
-        System.out.println(userService.user);
+        UserService userService = new UserService(5);
+        System.out.println(userService.getMessages());
     }
 }
