@@ -4,15 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="my.app.entities.User">
     <select id="findMessagesById" resultType="my.app.entities.Message">
-        SELECT * FROM user WHERE user_id = #{user_id}
+        SELECT * FROM message WHERE user_id = #{user_id}
     </select>
 
     <select id="findMessagesByIdAndTarget" resultType="my.app.entities.Message">
-        SELECT * FROM user WHERE user_id = #{user_id} AND target_id = #{target_id}
+        SELECT * FROM message WHERE user_id = #{user_id} AND target_id = #{target_id}
     </select>
 
     <insert id="insertMessage">
-        INSERT user(user_id,target_id,type,value,time)
+        INSERT message(user_id,target_id,type,value,time)
         VALUES (#{user_id},#{target_id},#{type},#{value},#{time})
     </insert>
 

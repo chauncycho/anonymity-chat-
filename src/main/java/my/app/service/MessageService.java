@@ -32,4 +32,10 @@ public class MessageService {
         message.setTime(new Date());
         return addMessage(message);
     }
+
+//    测试
+    public static void main(String[] args) {
+        MessageService.addTextMessage(5,6,"I love you");
+        System.out.println(MessageService.getMessagesById(5));
+    }
 }
