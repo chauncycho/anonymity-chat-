@@ -24,7 +24,6 @@ public class WebSocketService {
         countAdd();
 
         //通知登录成功
-        session.getBasicRemote().sendText(userid+"连接成功");
         System.out.println(userid+"登录");
         System.out.println("当前用户数:"+onlineCount);
     }
