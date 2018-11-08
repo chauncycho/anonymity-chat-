@@ -12,6 +12,10 @@ public class MessageService {
         return MessageDAO.getMessagesByIdAndTargetId(user_id, target_id);
     }
 
+    public static List<Message> getLast20MessagesByIdAndTargetIdDesc(int user_id, int target_id){
+        return MessageDAO.getLast20MessagesByIdAndTargetIdDesc(user_id, target_id);
+    }
+
 //    通过user_id获取消息
     public static List<Message> getMessagesById(int user_id){
         return MessageDAO.getMessagesById(user_id);
@@ -39,7 +43,7 @@ public class MessageService {
 //        MessageService.addTextMessage(8,5,"不去");
 //        MessageService.addTextMessage(5,8,"为什么");
 //        MessageService.addTextMessage(8,5,"冷");
-        System.out.println(MessageService.getMessagesByIdAndTargetId(5,8));
+        System.out.println(MessageService.getLast20MessagesByIdAndTargetIdDesc(5,8));
 //        System.out.println(MessageService.getMessagesById(8));
     }
 }
